@@ -11,7 +11,7 @@ class JogoDaVelha:
         self.me = "X"
         self.opponent = "O"
         self.turn = "X"
-        self.winner = None
+        self.winner = "N"
         self.moves = 0
 
 
@@ -22,14 +22,14 @@ class JogoDaVelha:
         server.listen(1)
         
         client, addr = server.accept()
+        
 
         self.me = "X"
         self.opponent = "O"
         threading.Thread(target=self.handle_connection, args=(client,)).start()
-        server.close()
+       
 
     def valid_move(self, move):
-        
        
         for i in range (2): 
             if(int(move[i])>2 or int(move[i])<0):
@@ -38,24 +38,28 @@ class JogoDaVelha:
         return (self.board[int(move[0])][int(move[1])]==" ")
     
     def handle_connection(self, client):
-        while self.winner == None:
+        while self.winner == "N":
             if self.moves < 9: 
                 if self.turn == self.me:
                     move = input("Onde deseja jogar no tabuleiro (linha, coluna)?")
                     if self.valid_move(move.split(',')):
-                        client.send(move.encode('utf-8'))
-                        self.apply_move(move.split(','),self.me)
+                        moveEncoded = move.encode('utf-8')
+                        client.send(moveEncoded)
+                        self.apply_move(move,self.me)
                         self.turn = self.opponent
+                    
                     else:
                         print("Jogada inválida")
                 
                 else:
-                    data = client.recv(1024)
-                    if not data:
+                    data = client.recv(1024) 
+                
+                    if not data: # Cliente desconectou
+                        print("O oponente desconectou.")
                         break
-                    else:
-                        self.apply_move(data.decode('utf-8').split(','), self.opponent)
-                        self.turn = self.me
+                   
+                    self.apply_move(data.decode('utf-8'), self.opponent)
+                    self.turn = self.me
 
                     
         client.close()
@@ -88,6 +92,8 @@ class JogoDaVelha:
             self.winner = self.board[2][0]
         
     def apply_move(self, move, player):
+
+        move = move.split(',')
         self.moves += 1
         self.board[int(move[0])][int(move[1])] = player
         
@@ -104,5 +110,5 @@ class JogoDaVelha:
             print("Deu empate!")
 
 game = JogoDaVelha()
-game.host_game("localhost", 9998)
+game.host_game("localhost", 9999)
 

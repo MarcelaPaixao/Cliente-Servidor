@@ -10,7 +10,7 @@ class JogoDaVelha:
         self.me = "O"
         self.opponent = "X"
         self.turn = "X"
-        self.winner = None
+        self.winner = "N"
         self.moves = 0
     
     def connect_opponent(self, host, port): 
@@ -21,33 +21,7 @@ class JogoDaVelha:
         self.opponent = "X"
         threading.Thread(target=self.handle_connection, args=(client,)).start()
     
-
-    def handle_connection(self, client):
-        while self.winner == None:
-            if self.moves < 9: 
-                if self.turn == self.me:
-                    move = input("Onde deseja jogar no tabuleiro (linha, coluna)?")
-                    if self.valid_move(move.split(',')):
-                        client.send(move.encode('utf-8'))
-                        self.apply_move(move.split(','),self.me)
-                        self.turn = self.opponent
-                    else:
-                        print("Jogada inválida")
-                
-                else:
-                    data = client.recv(1024)
-                    
-                    self.apply_move(data.decode('utf-8').split(','), self.opponent)
-                    self.turn = self.me
-
-                    
-        client.close()
-    
-    
-    
-
     def valid_move(self, move):
-        
         
         for i in range (2): 
             if(int(move[i])>2 or int(move[i])<0):
@@ -55,6 +29,34 @@ class JogoDaVelha:
         
         return (self.board[int(move[0])][int(move[1])]=="")
     
+    def handle_connection(self, client):
+        while self.winner == "N":
+            if self.moves < 9: 
+                if self.turn == self.me:
+                    move = input("Onde deseja jogar no tabuleiro (linha, coluna)?")
+                    if self.valid_move(move.split(',')):
+                        moveEncoded = move.encode('utf-8')
+                        client.send(moveEncoded)
+                        self.apply_move(move,self.me)
+                        self.turn = self.opponent
+                        
+                    else:
+                        print("Jogada inválida")
+                
+                else:
+                    data = client.recv(1024)
+                    if not data:
+                        print("O oponente desconectou")
+                        break
+                    
+                    data1 = data.decode('utf-8')
+                    print(data1)
+                    self.apply_move(data1, self.opponent)
+                    self.turn = self.me
+
+                    
+        client.close()
+  
     
     def print_board(self):
         for row in range(SIZE):
@@ -84,12 +86,14 @@ class JogoDaVelha:
             self.winner = self.board[2][0]
         
     def apply_move(self, move, player):
+        move = move.split(',')
         self.moves += 1
         self.board[int(move[0])][int(move[1])] = player
         
         self.print_board()
         self.check_for_winner()
-        
+        print("winner")
+        print(self.winner)
         if self.winner == self.me:
             print("Parabéns, você venceu :)")
 
@@ -102,4 +106,4 @@ class JogoDaVelha:
 
 
 game = JogoDaVelha()
-game.connect_opponent("localhost", 9998)
+game.connect_opponent("localhost", 9999)
