@@ -4,12 +4,12 @@ import threading
 class JogoDaVelha:
 
     
-    def init_game(self):
-        self.board = [["", "", ""], ["", "", ""], ["", "", ""]]
+    def __init__(self):
+        self.board = [[" ", " ", " "], [" ", " ", " "], [" ", " ", " "]]
         self.me = "X"
         self.opponent = "O"
         self.turn = "X"
-        self.winner = ""
+        self.winner = None
         self.moves = 0
 
 
@@ -33,7 +33,7 @@ class JogoDaVelha:
             if(int(move[i])>2 or int(move[i])<0):
                 return False
         
-        return (self.board[int(move[0])][int(move[1])]=="")
+        return (self.board[int(move[0])][int(move[1])]==" ")
 
 
 
@@ -46,7 +46,7 @@ class JogoDaVelha:
         threading.Thread(target=self.handle_connection, args=(client,)).start()
     
     def handle_connection(self, client):
-        while self.winner == "":
+        while self.winner == None:
             if self.moves < 9: 
                 if self.turn == self.me:
                     move = input("Onde deseja colocar o seu %s no tabuleiro (linha, coluna)?", self.me)
@@ -67,3 +67,15 @@ class JogoDaVelha:
 
                     
         client.close()
+    
+    def print_board(self):
+        for row in range(3):
+            print(" | ".join(self.board[row]))
+            if row != 2:
+                print("----------")
+    
+    def check_for_winner(self):
+        #Verificar se ganhou na linha
+        #Verificar se ganhou na coluna
+        #Verificar se ganhou na diagonal 1
+        #Verificar se ganhou na diagonal 2
