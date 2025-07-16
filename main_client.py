@@ -27,8 +27,9 @@ class JogoDaVelha:
         client = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
         client.connect((host, port))
         
-        self.me = "O"
-        self.opponent = "X"
+        # MARCELA: pra que servem essas linhas? me e opponent já foram inicializados
+        # self.me = "O"
+        # self.opponent = "X"
         threading.Thread(target=self.handle_connection, args=(client,)).start()
     
     def valid_move(self, move):

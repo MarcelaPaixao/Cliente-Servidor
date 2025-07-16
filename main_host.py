@@ -30,8 +30,9 @@ class JogoDaVelha:
         
         client, addr = server.accept()
 
-        self.me = "X"
-        self.opponent = "O"
+        # MARCELA: pra que servem essas linhas? me e opponent já foram inicializados
+        # self.me = "X"
+        # self.opponent = "O"
         threading.Thread(target=self.handle_connection, args=(client,)).start()
        
 
