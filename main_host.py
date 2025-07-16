@@ -80,22 +80,22 @@ class JogoDaVelha:
     def check_for_winner(self):
         #Verifica nas linhas
         for row in range(SIZE):
-            if self.board[row][0] == self.board[row][1] == self.board[row][2]:
+            if self.board[row][0] == self.board[row][1] == self.board[row][2] != " ":
                 self.winner = self.board[row][0]
                 # return
         
         #Verifica nas colunas
         for col in range(SIZE):
-            if self.board[0][col] == self.board[1][col] == self.board[2][col]:
+            if self.board[0][col] == self.board[1][col] == self.board[2][col] != " ":
                 self.winner = self.board[0][col]
                 # return
 
         #Verifica na diagonal 1
-        if self.board[0][0] == self.board[1][1] == self.board[2][2]:
+        if self.board[0][0] == self.board[1][1] == self.board[2][2] != " ":
             self.winner = self.board[0][0]
             
         #Verifica na diagonal 2
-        elif self.board[2][0] == self.board[1][1] == self.board[0][2]:
+        elif self.board[2][0] == self.board[1][1] == self.board[0][2] != " ":
             self.winner = self.board[2][0]
         
     def apply_move(self, move, player):
@@ -113,3 +113,4 @@ class JogoDaVelha:
         
         elif self.moves == 9:
             print("Deu empate!")
+
