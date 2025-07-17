@@ -89,7 +89,7 @@ class JogoDaVelha:
                             self.turn = self.opponent
                         
                     else:
-                            print(f"Jogada inválida. Onde deseja jogar o '{self.me}' no tabuleiro (linha, coluna)? ")
+                            print(f"Jogada inválida.")
                     
                 else:
                     print("Vez do oponente!")
