@@ -23,11 +23,11 @@ class JogoDaVelha:
         self.moves = 0
 
     def valid_move(self, move):
-       
+        if(len(move)<2):
+            return False
         for i in range (2): 
             if(int(move[i])>2 or int(move[i])<0):
                 return False
-        
         return (self.board[int(move[0])][int(move[1])]==" ")
     
     def print_board(self):
@@ -77,31 +77,31 @@ class JogoDaVelha:
             print("Deu empate!")
     
     def handle_connection(self, client):
+      
         while self.winner == None:
             if self.moves < 9: 
                 if self.turn == self.me:
                     move = input(f"Onde deseja jogar o '{self.me}' no tabuleiro (linha, coluna)?")
                     if self.valid_move(move.split(',')):
-                        moveEncoded = move.encode('utf-8')
-                        client.send(moveEncoded)
-                        self.apply_move(move,self.me)
-                        self.turn = self.opponent
-                    
+                            moveEncoded = move.encode('utf-8')
+                            client.send(moveEncoded)
+                            self.apply_move(move,self.me)
+                            self.turn = self.opponent
+                        
                     else:
-                        print("Jogada inválida")
-                
+                            print(f"Jogada inválida. Onde deseja jogar o '{self.me}' no tabuleiro (linha, coluna)? ")
+                    
                 else:
                     print("Vez do oponente!")
                     data = client.recv(1024) 
-                
-                    if not data: # Cliente desconectou
+                    
+                    if not data: 
                         print("O oponente desconectou.")
                         break
-                    
+                        
                     self.apply_move(data.decode('utf-8'), self.opponent)
                     self.turn = self.me
-            if self.winner == "E" or self.winner == "X" or self.winner == "O" :
-                break
-
-                    
-        client.close()
+        
+        client.close()   
+                        
+        
