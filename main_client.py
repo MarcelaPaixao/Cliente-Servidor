@@ -26,12 +26,8 @@ class JogoDaVelha:
     def connect_opponent(self, host, port): 
         client = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
         client.connect((host, port))
-        
-        # MARCELA: pra que servem essas linhas? me e opponent já foram inicializados
-        # self.me = "O"
-        # self.opponent = "X"
         threading.Thread(target=self.handle_connection, args=(client,)).start()
-    
+        
     def valid_move(self, move):
         
         for i in range (2): 
@@ -63,10 +59,12 @@ class JogoDaVelha:
                                         
                     self.apply_move(data.decode('utf-8'), self.opponent)
                     self.turn = self.me
-
-                    
+            if self.winner == "E" or self.winner == "X" or self.winner == "O" :
+                break
         client.close()
   
+                    
+        
     
     def print_board(self):
         for row in range(SIZE):
@@ -110,10 +108,11 @@ class JogoDaVelha:
             print(f"Que pena '{self.me}', você perdeu :(")
         
         elif self.moves == 9:
+            self.winner = "E"
             print("Deu empate!")
 
 
 
 
 game = JogoDaVelha()
-game.connect_opponent("localhost", 9999)
+game.connect_opponent("localhost", 9998)

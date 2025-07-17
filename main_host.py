@@ -29,12 +29,8 @@ class JogoDaVelha:
         server.listen(1)
         
         client, addr = server.accept()
-
-        # MARCELA: pra que servem essas linhas? me e opponent já foram inicializados
-        # self.me = "X"
-        # self.opponent = "O"
         threading.Thread(target=self.handle_connection, args=(client,)).start()
-       
+        server.close()
 
     def valid_move(self, move):
        
@@ -68,6 +64,8 @@ class JogoDaVelha:
                     
                     self.apply_move(data.decode('utf-8'), self.opponent)
                     self.turn = self.me
+            if self.winner == "E" or self.winner == "X" or self.winner == "O" :
+                break
 
                     
         client.close()
@@ -115,9 +113,10 @@ class JogoDaVelha:
             print(f"Que pena '{self.me}', você perdeu :(")
         
         elif self.moves == 9:
+            self.winner = "E"
             print("Deu empate!")
    
 
 game = JogoDaVelha()
-game.host_game("localhost", 9999)
+game.host_game("localhost", 9998)
 
