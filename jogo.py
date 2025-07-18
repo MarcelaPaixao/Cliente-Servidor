@@ -1,6 +1,6 @@
 import os
 import platform
-
+import time
 SIZE = 3
 
 def clean_screen():
@@ -75,18 +75,56 @@ class JogoDaVelha:
         elif self.moves == 9:
             self.winner = "E"
             print("Deu empate!")
-    
+    def run_latency_test(self, connection):
+       
+        """Executa um teste de 'ping-pong' para medir a latência da rede."""
+        print("\n--- Iniciando Teste de Latência (RTT) ---")
+        
+       
+        if self.me == "O": 
+            latencias = []
+            for i in range(5):
+                inicio_rtt = time.monotonic()
+                connection.sendall(b'ping')
+                connection.recv(1024)
+                fim_rtt = time.monotonic()
+                
+                rtt_ms = (fim_rtt - inicio_rtt) * 1000
+                latencias.append(rtt_ms)
+                print(f"  - Ping {i+1}: Resposta em {rtt_ms:.2f} ms")
+                time.sleep(0.5)
+
+            media = sum(latencias) / len(latencias)
+            minimo = min(latencias)
+            maximo = max(latencias)
+
+            print("\n--- Resumo da Latência ---")
+            print(f"Mínima:  {minimo:.2f} ms")
+            print(f"Máxima:  {maximo:.2f} ms")
+            print(f"Média:   {media:.2f} ms")
+            print("--------------------------\n")
+
+        else: 
+            for _ in range(5):
+                data = connection.recv(1024)
+                if not data: break
+                connection.sendall(data)
+        
+        print("Teste de latência finalizado. Iniciando o jogo.")
+
     def handle_connection(self, client):
-      
+        
+        #self.run_latency_test(client)
+        
         while self.winner == None:
             if self.moves < 9: 
                 if self.turn == self.me:
                     move = input(f"Onde deseja jogar o '{self.me}' no tabuleiro (linha, coluna)?")
     
                     if self.valid_move(move.split(',')):
-                            
+                          
                             moveEncoded = move.encode('utf-8')
-                            client.send(moveEncoded)
+                            client.sendall(moveEncoded)
                             
                             self.apply_move(move,self.me)
                             self.turn = self.opponent
@@ -103,6 +141,8 @@ class JogoDaVelha:
                         
                     self.apply_move(data.decode('utf-8'), self.opponent)
                     self.turn = self.me
+               
+
         
         client.close()   
                         
