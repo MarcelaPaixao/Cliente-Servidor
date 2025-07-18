@@ -101,4 +101,4 @@ Possíveis Melhorias Futuras:
     - Chat entre jogadores;
     - Fazer uma interface mais bonita;
 
-PS:. utilizamos IA pra fazer os testes e tirar dúvidas de problemas no decorrer da codificação, por exemplo uma maneira de desconetar a porta rapidamente. 
+PS:. utilizamos IA pra fazer os testes e tirar dúvidas de problemas no decorrer da codificação, por exemplo uma maneira de desconectar a porta rapidamente. 
