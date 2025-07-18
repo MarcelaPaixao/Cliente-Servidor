@@ -82,9 +82,12 @@ class JogoDaVelha:
             if self.moves < 9: 
                 if self.turn == self.me:
                     move = input(f"Onde deseja jogar o '{self.me}' no tabuleiro (linha, coluna)?")
+    
                     if self.valid_move(move.split(',')):
+                            
                             moveEncoded = move.encode('utf-8')
                             client.send(moveEncoded)
+                            
                             self.apply_move(move,self.me)
                             self.turn = self.opponent
                         
@@ -94,7 +97,6 @@ class JogoDaVelha:
                 else:
                     print("Vez do oponente!")
                     data = client.recv(1024) 
-                    
                     if not data: 
                         print("O oponente desconectou.")
                         break

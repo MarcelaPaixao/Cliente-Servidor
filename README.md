@@ -56,6 +56,20 @@ Teste de "Input" Inválido
 
     -O terminal do servidor deve imprimir uma mensagem como: "Jogada inválida."
 
+Teste de desempenho: 
+    1.Tempo de latência: 
+    Execução:
+
+    1.Descomente os trechos de testes dos códigos e rode-os normalmente
+    
+    O que esperar:
+    
+    -A primeira coisa que você verá no terminal do cliente será o resultado do teste de latência, com os tempos mínimo, máximo e médio para a troca de mensagens.
+    
+    2.Tempo de Resposta da Jogada:
+
+
+    Este novo valor lhe dirá quanto tempo, em milissegundos, você esperou desde o envio da sua jogada até receber a próxima ação do servidor.
 
 
    
