@@ -4,13 +4,12 @@ import  socket
 import threading 
 
 def host_game(game, host, port):
-        server = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
-        server.setsockopt(socket.SOL_SOCKET, socket.SO_REUSEADDR, 1) 
-        server.bind((host, port))
-        server.listen(1)
-        
         
         try:
+                server = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
+                server.setsockopt(socket.SOL_SOCKET, socket.SO_REUSEADDR, 1) 
+                server.bind((host, port))
+                server.listen(1)
                 client, addr = server.accept()
                 client_thread = threading.Thread(target=game.handle_connection, args=(client,))
                 client_thread.start()
