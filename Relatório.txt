@@ -1,0 +1,15 @@
+Relatório do Projeto Cliente-Servidor: Jogo da Velha em Rede
+
+O objetivo deste projeto foi desenvolver um jogo da velha funcional para dois jogadores em uma rede, utilizando a arquitetura cliente-servidor em Python. O sistema foi construído com as bibliotecas socket para a comunicação em rede e threading para o gerenciamento de conexões, focando em funcionalidade, estabilidade e na capacidade de testar o desempenho da conexão.
+
+Para a execução deste trabalho de modo mais organizado e compreensível, o código foi separado em três arquivos distintos (jogo.py, host.py, client.py), separando a lógica principal do jogo da lógica de inicialização do servidor e do cliente.
+
+Para estabelecer a conexão entre cliente e servidor, utilizamos socket.SOCK_STREAM (TCP). Isso assegura que as jogadas são entregues na ordem correta e sem perdas, o que é essencial para um jogo baseado em turnos. Quando a conexão aceita, o servidor inicia uma nova thread para cuidar exclusivamente daquela partida. Isso permite que a lógica do jogo rode de forma isolada, sem bloquear o processo principal do servidor. Já para as jogadas, foi definido um protocolo simples baseado em texto (ex: "1,1"). 
+
+Quanto ao tratamento de erros, pensamos nas possibilidades de recebimento de jogadas Inválidas e comandos de saída do teclado. Como solução para não termos comportamento inesperado no jogo, continuamos pedindo a jogada até que a mesma seja válida e quanto ao tópico de interrupções de teclado e outros possíveis problemas de conexão,  tratamos com o try, catch e finally para que ambos sem encerrem suas Threads e o servidor feche a porta.
+ 
+Por último na implementação, fizemos um sistema simples de autenticação a base de tokens para o cliente. 
+
+Em relação aos testes, tivemos dificuldade de entender exatamente o que testar e por pedimos ajuda ao gemini. 
+ 
+Em suma, o projeto foi concluído com sucesso, resultando em uma aplicação de jogo da velha em rede que é funcional. As dificuldades encontradas foram importantes para o nosso aprendizado de conceitos e implementação de práticas de programação de rede.
