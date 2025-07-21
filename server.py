@@ -3,6 +3,11 @@ from jogo import *
 import  socket
 import threading 
 
+TOKENS_VALIDOS = {
+        "user1@@@" : "user1",
+        "abc123" : "user2",
+}
+
 def host_game(game, host, port):
         
         try:
@@ -11,9 +16,21 @@ def host_game(game, host, port):
                 server.bind((host, port))
                 server.listen(1)
                 client, addr = server.accept()
-                client_thread = threading.Thread(target=game.handle_connection, args=(client,))
-                client_thread.start()
-                client_thread.join()
+
+                token = client.recv(1024).decode()
+                if token in TOKENS_VALIDOS:
+                        name = TOKENS_VALIDOS[token]
+                        print(f"Token válido. Usuário: {name}")
+                        client.send("Sucesso".encode())
+
+                        client_thread = threading.Thread(target=game.handle_connection, args=(client,))
+                        client_thread.start()
+                        client_thread.join()
+                
+                else:
+                        print("Token inválido.")
+                        client.send("Falha".encode())
+                        client.close()
                 
         except KeyboardInterrupt:
                 print("Erro de teclado")

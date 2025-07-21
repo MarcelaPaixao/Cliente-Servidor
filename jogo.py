@@ -75,6 +75,7 @@ class JogoDaVelha:
         elif self.moves == 9:
             self.winner = "E"
             print("Deu empate!")
+    
     def run_latency_test(self, connection):
        
         """Executa um teste de 'ping-pong' para medir a latência da rede."""
